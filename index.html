@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#17251d">
+  <title>Village — جنگ قبایل</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand"><span class="brand-mark">♜</span><div><strong>VILLAGE</strong><small>جنگ قبایل · نسخه آفلاین</small></div></div>
+    <div class="resources" id="resourceBar"></div>
+    <div class="top-actions">
+      <span class="save-state" id="saveState">ذخیره محلی فعال</span>
+      <button class="btn btn-quiet" id="resetBtn" type="button">شروع دوباره</button>
+    </div>
+  </header>
+
+  <main class="layout">
+    <section class="game-panel">
+      <div class="map-heading">
+        <div>
+          <div class="eyebrow" id="mapEyebrow">نقشه جهان</div>
+          <h1 id="mapTitle">جهان شناخته‌شده</h1>
+          <p id="mapDescription">قلمروها و قلعه‌های شناخته‌شده را بررسی کن.</p>
+        </div>
+        <div class="map-actions">
+          <button class="btn btn-primary" id="enterCastleBtn" type="button">ورود به قلعه من</button>
+          <button class="btn btn-secondary hidden" id="backWorldBtn" type="button">بازگشت به جهان</button>
+        </div>
+      </div>
+
+      <div class="map-frame">
+        <canvas id="gameCanvas" aria-label="نقشه بازی"></canvas>
+        <div class="map-overlay">
+          <span class="map-tag" id="mapTag">WORLD MAP</span>
+          <span class="map-hint" id="mapHint">برای مشاهده اطلاعات قلعه‌ها روی آن‌ها بزن</span>
+        </div>
+      </div>
+      <div class="map-footer">
+        <span id="mapCoordinates">مختصات: —</span>
+        <span>نسخه آزمایشی آفلاین · داده‌ها فقط روی همین دستگاه ذخیره می‌شوند</span>
+      </div>
+    </section>
+
+    <aside class="sidebar">
+      <section class="card profile-card">
+        <div class="card-title"><span>فرماندهی</span><span class="status-dot"></span></div>
+        <div class="player-name"><div class="avatar">♛</div><div><strong>فرمانده بی‌نام</strong><small>قلمرو شخصی · سطح ۱</small></div></div>
+        <div class="stat-grid">
+          <div><small>روز فصل</small><strong id="seasonDay">۱ / ۴۵</strong></div>
+          <div><small>قدرت نظامی</small><strong id="militaryPower">۰</strong></div>
+        </div>
+      </section>
+
+      <section class="card" id="selectionCard">
+        <div class="card-title">اطلاعات موقعیت</div>
+        <div id="selectionContent" class="empty-state">برای دیدن اطلاعات یک قلعه، آن را روی نقشه انتخاب کن.</div>
+      </section>
+
+      <section class="card" id="castleTools">
+        <div class="card-title">ساخت‌وساز قلعه</div>
+        <p class="muted">برای ساخت، یک ساختمان را انتخاب کن و سپس روی خانه خالی نقشه بزن.</p>
+        <div class="build-list" id="buildList">
+          <button class="build-option active" data-building="farm"><span>🌾</span><span><b>مزرعه</b><small>چوب ۲۰ · سنگ ۵</small></span></button>
+          <button class="build-option" data-building="lumber"><span>🪵</span><span><b>چوب‌بری</b><small>چوب ۱۵ · سنگ ۱۰</small></span></button>
+          <button class="build-option" data-building="quarry"><span>⛏️</span><span><b>معدن سنگ</b><small>چوب ۱۵ · سنگ ۱۵</small></span></button>
+          <button class="build-option" data-building="barracks"><span>⚔️</span><span><b>سربازخانه</b><small>چوب ۳۰ · سنگ ۲۵</small></span></button>
+          <button class="build-option" data-building="wall"><span>🧱</span><span><b>دیوار</b><small>چوب ۵ · سنگ ۲۰</small></span></button>
+        </div>
+        <div class="selected-tool" id="selectedTool">ساخت انتخاب‌شده: مزرعه</div>
+      </section>
+
+      <section class="card">
+        <div class="card-title">قبایل شناخته‌شده</div>
+        <div class="tribe-list" id="tribeList"></div>
+      </section>
+
+      <section class="card note-card">
+        <strong>یادآوری نسخه آفلاین</strong>
+        <p>قبایل فعلاً شخصیت‌های غیرقابل‌بازی هستند. اطلاعات و موقعیت‌ها نمونه‌اند و هنوز هیچ بازیکن واقعی یا ارتباط اینترنتی وجود ندارد.</p>
+      </section>
+    </aside>
+  </main>
+  <div class="toast" id="toast" role="status"></div>
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>
