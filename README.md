@@ -35,16 +35,14 @@ Then open `http://localhost:8000`.
 ## Project structure
 
 ```text
-village-two-maps/
+Rise/
 ├── index.html
-├── README.md
-├── css/
-│   └── styles.css
-└── js/
-    ├── app.js
-    ├── config.js
-    ├── renderer.js
-    └── state.js
+├── style.css
+├── app.js
+├── config.js
+├── state.js
+├── combat.js
+└── renderer.js
 ```
 
 ## Important prototype limitations
