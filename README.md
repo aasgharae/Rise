@@ -1,58 +1,31 @@
-# Village — Two Maps (Offline Prototype)
+# Rise — Offline Clan Strategy Prototype
 
-A static, offline-first prototype for a future online clan strategy game. It runs on GitHub Pages and does not require a server.
+A Persian RTL, single-device strategy game prototype. It runs as a static site, stores each local account and game save in the browser, and needs no server. It is **not multiplayer** and the local password screen is only a convenience gate, not real security. Never reuse a real password here. For a real online release, move authentication, player data, economy, training, combat and season results to a trusted server.
 
-## Features
+## Play locally
 
-- Two distinct maps: a shared world map and a private castle map.
-- Five predefined NPC clans with names, colors, positions, public power and territory labels.
-- On the world map, other clans are represented only by castle markers. Their interiors, buildings and troop compositions are not exposed.
-- Enter your own castle and return to the world map.
-- Basic local construction: farm, lumber camp, quarry, barracks and wall.
-- Basic resource production and local autosave using `localStorage`.
-- Responsive Persian RTL interface.
-
-## Run locally
-
-Because JavaScript modules are used, run this folder through a local static server rather than opening `index.html` directly.
-
-For example, with Python installed:
+Serve this folder over localhost (ES modules and Web Crypto require a secure context):
 
 ```bash
 python -m http.server 8000
 ```
 
-Then open `http://localhost:8000`.
+Then open `http://localhost:8000`. On first launch, create a local username and password (8+ characters). The password hash uses PBKDF2-SHA-256 with a random salt. The account only exists in this browser; clearing browser storage removes it.
 
-## Publish on GitHub Pages
+## Current gameplay
 
-1. Create or open a GitHub repository.
-2. Upload the contents of this folder (the `index.html`, `css` and `js` folders, and `README.md`) to the repository root.
-3. Open **Settings → Pages**.
-4. Select **Deploy from a branch**, choose `main` and `/ (root)`, then save.
-5. Open the published Pages URL.
+- World map and private castle map, with five NPC clans.
+- Construction upgrades, resource production, training queue, troop capacity, battles, loot and seasonal reset.
+- Offline production and training use the same simulation step as active play, capped at 72 hours.
+- Starting resources are 1,000× the previous prototype values; storage capacity was raised so initial stock is not immediately truncated.
+- Local SVG icons and procedural terrain are bundled in `assets/icons`, no remote asset requests are needed.
 
-## Project structure
+## Tests
 
-```text
-Rise/
-├── index.html
-├── style.css
-├── app.js
-├── config.js
-├── state.js
-├── combat.js
-└── renderer.js
+```bash
+node --test
 ```
 
-## Important prototype limitations
+## Online migration notes
 
-- This is a single-device offline prototype. NPC clans are predefined data, not live players.
-- There is no login, multiplayer, server authority, combat, movement orders, payments or leaderboard yet.
-- Resources and progress are stored in the browser's local storage. Clearing browser data removes the save.
-- The world map is a shared *design concept*, but it is not a shared online world until a backend and database are added.
-- The 45-day counter is a prototype indicator; it does not yet implement season rollover or reset logic.
-
-## Architecture notes for the online version
-
-Keep the browser as a presentation/client layer. When the server is introduced, the server should own authentication, player state, resource production, troop composition, battle resolution, purchases and leaderboard calculations. The client must never be trusted to decide gold balances or battle results.
+The browser must be treated as untrusted. The local username/password feature is not an authentication system for a public game. Use server-side password hashing, sessions, authorization, authoritative resource and battle calculations, database-backed saves, rate limiting, and server-controlled season rollover before enabling real players or purchases.
