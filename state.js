@@ -1,6 +1,12 @@
 import {CONFIG, DEFAULT_TRIBES, START_RESOURCES} from "./config.js";
-import {buildingProd} from "./config.js";
-const KEY = "village_rise_v4";
+import {buildingProd, TROOPS} from "./config.js";
+const TROOP_IDS=Object.keys(TROOPS);
+let KEY = "village_rise_v5";
+const LEGACY_KEY = "village_rise_v4";
+export function setSaveScope(username){
+const id=encodeURIComponent(String(username||"default").trim().toLowerCase())||"default";
+KEY="village_rise_v5_"+id;
+}
 const WW = 56, WH = 36, CW = 26, CH = 18;
 function rng(seed){let s=seed>>>0;return()=>{s=(s*1664525+1013904223)>>>0;return s/4294967296;};}
 function makeWorld(){
@@ -23,7 +29,8 @@ return t;
 export function createInitialState(){
 const now=Date.now();
 return {
-version:4,
+version:5,
+seasonIndex:0,
 seasonStart:now, lastTick:now, activeMap:"world",
 resources:{...START_RESOURCES},
 world:makeWorld(),
@@ -57,10 +64,23 @@ selectedEntity:null, selectedCastleId:"keep-1", seasonDayCache:1
 }
 export function loadState(){
 try{
-const raw=localStorage.getItem(KEY);
+let raw=localStorage.getItem(KEY);
+let legacy=false;
+if(!raw){raw=localStorage.getItem(LEGACY_KEY);legacy=!!raw;}
 if(!raw) return null;
 const s=JSON.parse(raw);
-if(!s || s.version!==4 || !s.world || !s.castle) return null;
+if(!s || !s.world || !s.castle || !Array.isArray(s.castle.buildings)) return null;
+s.version=5;
+s.seasonIndex=Math.max(0,Number(s.seasonIndex)||0);
+s.resources={food:0,wood:0,stone:0,iron:0,gold:0,...(s.resources||{})};
+s.troops={swordsman:0,spearman:0,archer:0,cavalry:0,catapult:0,...(s.troops||{})};
+s.queue=Array.isArray(s.queue)?s.queue.filter(q=>q && TROOP_IDS.includes(q.id) && Number.isFinite(q.left) && q.left>=0):[];
+s.stats={wins:0,losses:0,loot:0,...(s.stats||{})};
+s.player={name:"فرمانده بی‌نام",...s.player};
+s.seasonStart=Number(s.seasonStart)||Date.now();
+s.lastTick=Number(s.lastTick)||Date.now();
+s.tribes=Array.isArray(s.tribes)?s.tribes.map(t=>{const base=DEFAULT_TRIBES.find(x=>x.id===t.id)||{};return {...base,...t,territory:t.territory||base.territory||"ناشناخته",reputation:t.reputation||base.reputation||"بی‌طرف"};}):JSON.parse(JSON.stringify(DEFAULT_TRIBES));
+if(legacy){try{localStorage.setItem(KEY,JSON.stringify(s));localStorage.removeItem(LEGACY_KEY);}catch(e){}}
 return s;
 }catch(e){return null;}
 }
@@ -98,10 +118,33 @@ return r;
 export function troopCap(s){
 let farmLv=0;
 for(const b of s.castle.buildings) if(b.type==="farm") farmLv+=b.level;
-return 60 + keepLevel(s)*30 + farmLv*6;
+return 60 + keepLevel(s)*30 + farmLv*6 + Math.max(0,((s.player||{}).level||1)-1)*10;
 }
 export function troopCount(s){
 let n=0;
 for(const k in s.troops) n+= (s.troops[k]||0);
 return n;
+}
+export function queuedTroopCount(s){return (s.queue||[]).reduce((n,q)=>n+Math.max(0,Number(q.count)||0),0);}
+export function availableTroopCapacity(s){return Math.max(0,troopCap(s)-troopCount(s)-queuedTroopCount(s));}
+export function advanceStateTime(s, seconds){
+let dt=Math.max(0,Math.min(72*3600,Number(seconds)||0));
+const rates=calcRates(s), cap=storageCap(s);
+let upkeep=0;
+for(const k in (s.troops||{})) upkeep+=(TROOPS[k]?.upkeep||0)*(s.troops[k]||0);
+for(const k of Object.keys(rates)){
+const net=(rates[k]||0)-(k==="food"?upkeep:0);
+s.resources[k]=Math.max(0,Math.min(cap,(s.resources[k]||0)+net/3600*dt));
+}
+const completed=[];
+let remaining=dt;
+while(s.queue?.length && remaining>0){
+const q=s.queue[0];
+if(q.left>remaining){q.left-=remaining;remaining=0;break;}
+remaining-=q.left;
+s.queue.shift();
+s.troops[q.id]=(s.troops[q.id]||0)+q.count;
+completed.push(q);
+}
+return {completed,seconds:dt};
 }

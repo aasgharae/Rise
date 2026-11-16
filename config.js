@@ -1,21 +1,21 @@
-// نسخه تست 100 برابر - سازگار با app/state/combat
+// Rise offline prototype configuration
 export const CONFIG = {
 seasonLength: 45,
 dayMs: 86400000,
 tickMs: 1000,
-storageBase: 6000000,
-storagePerKeep: 250000,
+storageBase: 600000000,
+storagePerKeep: 250000000,
 worldW: 56,
 worldH: 36,
 castleW: 26,
 castleH: 18
 };
 export const START_RESOURCES = {
-food: 100000,
-wood: 80000,
-stone: 50000,
-iron: 30000,
-gold: 20000
+food: 100000000,
+wood: 80000000,
+stone: 50000000,
+iron: 30000000,
+gold: 20000000
 };
 export const RESMETA = {
 food: { name: 'غذا', icon: '🌾' },
@@ -28,11 +28,11 @@ export function resName(k) {
 return (RESMETA[k] && RESMETA[k].name) || k;
 }
 export const TROOPS = {
-swordsman: { name: 'شمشیرزن', atk: 10, def: 8, hp: 60, power: 12, upkeep: 1, unlock: 1, time: 30, cost: { food: 100, iron: 20 } },
-spearman: { name: 'نیزه‌دار', atk: 12, def: 12, hp: 70, power: 14, upkeep: 1, unlock: 1, time: 35, cost: { food: 120, wood: 40 } },
-archer: { name: 'کماندار', atk: 18, def: 6, hp: 45, power: 20, upkeep: 2, unlock: 2, time: 45, cost: { food: 150, wood: 80, gold: 10 } },
-cavalry: { name: 'سواره‌نظام', atk: 35, def: 20, hp: 140, power: 48, upkeep: 4, unlock: 3, time: 90, cost: { food: 300, iron: 100, gold: 50 } },
-catapult: { name: 'منجنیق', atk: 80, def: 10, hp: 200, power: 120, upkeep: 6, unlock: 4, time: 180, cost: { wood: 400, stone: 300, gold: 150 } }
+swordsman: { iconPath:'assets/icons/swordsman.svg', icon:'⚔️', desc:'نیروی متعادل برای نبرد نزدیک', name: 'شمشیرزن', atk: 10, def: 8, hp: 60, power: 12, upkeep: 1, unlock: 1, time: 30, cost: { food: 100, iron: 20 } },
+spearman: { iconPath:'assets/icons/spearman.svg', icon:'🔱', desc:'مقاوم و مناسب مقابله با سواره‌نظام', name: 'نیزه‌دار', atk: 12, def: 12, hp: 70, power: 14, upkeep: 1, unlock: 1, time: 35, cost: { food: 120, wood: 40 } },
+archer: { iconPath:'assets/icons/archer.svg', icon:'🏹', desc:'پشتیبانی دوربرد با قدرت حمله بالا', name: 'کماندار', atk: 18, def: 6, hp: 45, power: 20, upkeep: 2, unlock: 2, time: 45, cost: { food: 150, wood: 80, gold: 10 } },
+cavalry: { iconPath:'assets/icons/cavalry.svg', icon:'🐎', desc:'نیروی سریع و سنگین', name: 'سواره‌نظام', atk: 35, def: 20, hp: 140, power: 48, upkeep: 4, unlock: 3, time: 90, cost: { food: 300, iron: 100, gold: 50 } },
+catapult: { iconPath:'assets/icons/catapult.svg', icon:'🪨', desc:'ماشین محاصره؛ مؤثرتر علیه دفاع بالا', name: 'منجنیق', atk: 80, def: 10, hp: 200, power: 120, upkeep: 6, unlock: 4, time: 180, cost: { wood: 400, stone: 300, gold: 150 } }
 };
 export const BUILDINGS = {
 keep: { name: 'قلعه', icon: '🏰', desc: 'مرکز فرماندهی، افزایش انبار', max: 10, baseCost: { wood: 500, stone: 400, gold: 100 }, baseProd: 0 },
@@ -65,11 +65,11 @@ o[def.prod] = v;
 return o;
 }
 export const DEFAULT_TRIBES = [
-{ id: 'red-clan', name: 'قبیله سرخ', color: '#e74c3c', x: 10, y: 8, power: 180, def: 20 },
-{ id: 'golden', name: 'قبیله طلایی', color: '#f1c40f', x: 28, y: 5, power: 250, def: 25 },
-{ id: 'mountain', name: 'قبیله کوهستان', color: '#8e9aaf', x: 45, y: 8, power: 350, def: 32 },
-{ id: 'green-field', name: 'قبیله دشت سبز', color: '#2ecc71', x: 12, y: 28, power: 220, def: 22 },
-{ id: 'river', name: 'قبیله رود', color: '#3498db', x: 44, y: 27, power: 300, def: 28 }
+{ id: 'red-clan', name: 'قبیله سرخ', color: '#e74c3c', x: 10, y: 8, power: 180, def: 20, territory:'دشت‌های جنوبی', reputation:'تهاجمی' },
+{ id: 'golden', name: 'قبیله طلایی', color: '#f1c40f', x: 28, y: 5, power: 250, def: 25, territory:'فلات مرکزی', reputation:'ثروتمند' },
+{ id: 'mountain', name: 'قبیله کوهستان', color: '#8e9aaf', x: 45, y: 8, power: 350, def: 32, territory:'کوهستان شمالی', reputation:'دفاعی' },
+{ id: 'green-field', name: 'قبیله دشت سبز', color: '#2ecc71', x: 12, y: 28, power: 220, def: 22, territory:'دشت‌های غربی', reputation:'کشاورز' },
+{ id: 'river', name: 'قبیله رود', color: '#3498db', x: 44, y: 27, power: 300, def: 28, territory:'کنار رود بزرگ', reputation:'بازرگان' }
 ];
 export const STARTER_CASTLE = [
 { id: 'keep-1', type: 'keep', x: 13, y: 8, level: 1 },

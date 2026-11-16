@@ -7,7 +7,22 @@
 <title>Village — جنگ قبایل | فصل ۴۵ روزه</title>
 <link rel="stylesheet" href="style.css">
 </head>
-<body>
+<body class="auth-locked">
+<div id="authGate" class="auth-screen">
+ <section class="auth-panel">
+  <div class="auth-mark">♜</div><p class="auth-kicker">RISE · نسخه‌ی آفلاین</p>
+  <h1 id="authTitle">ساخت حساب محلی</h1><p id="authHint" class="muted">نام کاربری و رمز دلخواهت را بساز.</p>
+  <form id="authForm" autocomplete="on">
+   <label>نام کاربری<input id="authUsername" minlength="3" maxlength="24" required autocomplete="username" placeholder="مثلاً alis"></label>
+   <label>رمز عبور<input id="authPassword" type="password" minlength="8" required autocomplete="new-password" placeholder="حداقل ۸ نویسه"></label>
+   <label id="confirmWrap">تکرار رمز<input id="authConfirm" type="password" minlength="8" autocomplete="new-password" placeholder="رمز را دوباره وارد کن"></label>
+   <p id="authMessage" class="auth-message" role="status"></p>
+   <button id="authSubmit" class="btn btn-primary auth-submit" type="submit">ساخت حساب و شروع</button>
+  </form>
+  <button id="authSwitch" class="btn btn-quiet auth-switch" type="button">حساب داری؟ ورود</button>
+  <p class="auth-warning">این حساب فقط روی همین مرورگر ذخیره می‌شود. برای نسخه‌ی آنلاین واقعی، احراز هویت باید سمت سرور پیاده‌سازی شود.</p>
+ </section>
+</div>
 <header class="topbar">
 <div class="brand"><span class="brand-mark">♜</span><div><strong>VILLAGE</strong><small>جنگ قبایل · آفلاین · فصل ۴۵ روزه واقعی</small></div></div>
 <div class="resources" id="resourceBar"></div>
@@ -15,6 +30,7 @@
 <div class="season-box"><b id="seasonDay">روز ۱ / ۴۵</b><small id="seasonCountdown">—</small><div class="season-bar"><i id="seasonProgress"></i></div></div>
 <span class="save-state" id="saveState">ذخیره محلی فعال</span>
 <button class="btn btn-quiet" id="resetBtn" type="button">شروع دوباره</button>
+<button class="btn btn-quiet" id="logoutBtn" type="button">خروج</button>
 </div>
 </header>
 <main class="layout">
@@ -49,11 +65,12 @@
 <section class="card"><div class="card-title"><span>🏗️ همه ساختمان‌ها</span><small class="muted">ارتقای سریع</small></div><div id="buildingList" class="building-list"></div></section>
 <section class="card" id="armyCard"><div class="card-title"><span>🛡️ ارتش و سربازخانه</span><small id="barracksLevel" class="muted"></small></div><div class="train-list" id="trainList"></div><div id="queueList" class="queue"></div><div id="troopOverview" class="troop-overview"></div></section>
 <section class="card"><div class="card-title">قبایل شناخته‌شده</div><div class="tribe-list" id="tribeList"></div></section>
-<section class="card note-card"><strong>نسخه آفلاین آماده آنلاین</strong><p>همه ساختمان‌ها از قبل ساخته شده‌اند. فقط ارتقا بده تا تولید چند برابر شود. فصل هر ۴۵ روز واقعی ریست می‌شود.</p></section>
+<section class="card note-card"><strong>نسخه آفلاین آماده آنلاین</strong><p>نمونه‌ی تک‌نفره و آفلاین؛ ذخیره برای هر نام کاربری محلی جداست. فصل هر ۴۵ روز بازی می‌شود و نقشه و اقتصاد روی همین دستگاه اجرا می‌شوند.</p></section>
 </aside>
 </main>
 <div class="toast" id="toast"></div>
 <div class="modal hidden" id="modal"><div class="modal-box"><button class="modal-close" id="modalClose" type="button">×</button><div id="modalContent"></div></div></div>
+<script type="module" src="auth.js"></script>
 <script type="module" src="app.js"></script>
 </body>
 </html>
