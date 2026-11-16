@@ -1,30 +1,6 @@
-import {TROOPS} from "./config.js";
-export function armyPower(army){let p=0;for(const k in army)p+=(TROOPS[k]?(TROOPS[k].power||0):0)*(army[k]||0);return Math.round(p);}
-export function wallDefense(state){let d=0;for(const b of state.castle.buildings)if(b.type==="wall")d+=35*b.level;const k=state.castle.buildings.find(b=>b.type==="keep");if(k)d+=k.level*18;return d;}
-export function resolveBattle(state,army,tribe){
-const atkBase=armyPower(army);let bonus=1;const total=Math.max(1,Object.values(army).reduce((a,b)=>a+b,0));
-const frac=k=>(army[k]||0)/total;
-if((army.catapult||0)>0)bonus+=0.22*frac("catapult")*3;
-if((army.ballista||0)>0)bonus+=0.18*frac("ballista")*3;
-if((army.axeman||0)>0)bonus+=0.10*frac("axeman")*2;
-if((army.spearman||0)>0)bonus+=0.05;
-if((army.cavalry||0)>0&&(army.archer||0)>0)bonus+=0.06;
-if((army.swordsman||0)>0&&(army.spearman||0)>0)bonus+=0.04;
-if((army.knight||0)>0)bonus+=0.05;
-const wallB=wallDefense(state)*0.6;
-const atk=Math.round((atkBase+wallB)*bonus*(0.9+Math.random()*0.25));
-const day=state.seasonDayCache||1;const growth=1+(day/45)*0.45;
-const def=Math.round(tribe.power*(tribe.defeated?0.42:1)*(0.86+Math.random()*0.28)*growth);
-const win=atk>def;const ratio=win?def/Math.max(1,atk):atk/Math.max(1,def);
-const knightFrac=frac("knight");const dmgRed=knightFrac*0.12;
-const survivors={};let lost=0;
-for(const k in army){const c=army[k]||0;if(!c){survivors[k]=0;continue;}
-let lr=win?(1-ratio)*0.32+0.04:0.42+(1-ratio)*0.28;lr=Math.max(0.01,lr-dmgRed);
-const dead=Math.min(c,Math.floor(c*lr+Math.random()*2));survivors[k]=c-dead;lost+=dead;}
-let loot={food:0,wood:0,stone:0,iron:0,gold:0};
-if(win){const base=Math.round(tribe.power*0.22+70+Math.random()*90);
-loot={food:Math.round(base*0.9),wood:Math.round(base*0.7),stone:Math.round(base*0.55),iron:Math.round(base*0.2+8),gold:Math.round(base*0.35+25)};
-if(tribe.power<200){loot.gold+=120;loot.food+=220;loot.iron+=25;}}
-const xp=win?Math.round(def/8+35):Math.round(atk/22+12);
-return {win:win,atk:atk,def:def,survivors:survivors,lost:lost,loot:loot,xp:xp,bonus:Number(bonus.toFixed(2))};
-}
+import{TROOPS}from'./config.js';
+export function armyPower(tr){let p=0;for(const k in tr)p+=(TROOPS[k]?.power||0)*(tr[k]||0);return p;}
+export function resolveAttack(my,tribe,wallLvl){let atk=armyPower(my);let def=tribe.power+wallLvl*15;
+if((my.catapult||0)>0)def*=0.65;else if((my.ballista||0)>0)def*=0.8;
+if((my.knight||0)>0)atk*=1.12;const win=atk>def*1.02;
+const loot=win?(tribe.loot||{gold:200}):{};return{win,atk:Math.floor(atk),def:Math.floor(def),loot};}
