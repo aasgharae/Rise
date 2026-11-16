@@ -1,6 +1,6 @@
-export const CONFIG={seasonLength:45,dayMs:86400000,tickMs:1000,storageBase:12000,storagePerKeep:4000,worldW:56,worldH:36,castleW:26,castleH:18};
+export const CONFIG={seasonLength:45,dayMs:86400000,tickMs:1000,storageBase:120000000,storagePerKeep:4000,worldW:56,worldH:36,castleW:26,castleH:18};
 export const BATCH_OPTIONS=[1,10,50,100];
-export const START_RESOURCES={food:2500,wood:1800,stone:1200,iron:500,gold:400};
+export const START_RESOURCES={food:25000000,wood:18000000,stone:12000000,iron:5000000,gold:4000000};
 export const RESMETA={food:{name:'غذا',icon:'🌾'},wood:{name:'چوب',icon:'🪵'},stone:{name:'سنگ',icon:'🪨'},iron:{name:'آهن',icon:'⛓️'},gold:{name:'طلا',icon:'🪙'}};
 export function resName(k){return (RESMETA[k]&&RESMETA[k].name)||k;}
 export const TROOPS={
